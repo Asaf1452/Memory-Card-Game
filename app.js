@@ -1,4 +1,3 @@
-// The init will be called when onload or when 'Restart' is clicked or after the game is finished.
 const init = () => {
     document.querySelector("#cards").innerHTML = "";
     document.querySelector("#hearts").innerHTML = "❤️";
@@ -8,7 +7,6 @@ const init = () => {
     hardModeBtn.addEventListener('click', () => buildGame(true));
 }
 
-// This will be called once everytime from 'init' to create a div as overlay on top of the container to allow selecting the difficulty before starting the game.
 const selectDifficultyMenu = () => {
     menu = document.createElement('div');
     menu.id = "menu";
@@ -98,7 +96,6 @@ const removeFromRecords = (record) => {
     localStorage.setItem("records", JSON.stringify(records));
 }
 
-// The 'buildGame' function will, based on the selected difficulty, prepere the cards, their content when flipped, randomize their order and display them in the 'cards' div. 
 const buildGame = (hardMode) => {
     document.querySelector("#menu").remove();
     if(window.innerWidth > 1300)
@@ -113,7 +110,6 @@ const buildGame = (hardMode) => {
     play(cardContent, hardMode)
 }
 
-// This will be called in the 'buildGame' function. it will initiate the array that contains the cards content when flipped, fill the array with content based on the accepted difficulty and returns the array.
 const getCardsContent = (hardMode) => {
     let cardContent = [];
     if(hardMode){
@@ -125,7 +121,6 @@ const getCardsContent = (hardMode) => {
     return cardContent;
 }
 
-// This will be called right after the 'getCardsContent' function. The function accepts the content array and based on it it will, create, randomize the order of the elements and return a new randomized array.
 const sortRandomly = (cardContent) => {
     const randomizedArr = [];
     while(cardContent.length != 0){
@@ -139,7 +134,6 @@ const sortRandomly = (cardContent) => {
     return randomizedArr;
 }
 
-// The 'Display' function is called in the 'buildGame' funtion. it accepts the content array to display the number of cards and the selected difficulty to display the hearts (lives) the user has left.
 const display = (cardContent, hardMode) => {
     const cards = document.querySelector("#cards");
     for(let i = 0; i < cardContent.length; i++){
@@ -150,7 +144,6 @@ const display = (cardContent, hardMode) => {
     else hearts.innerHTML = "❤️❤️❤️❤️❤️";
 }
 
-// The 'play' function defines the main behavior of the game. it is called after the 'buildGame' function. The function will start the timer and define the functionality of the cards when clicked.
 const play = (cardContent, hardMode) => {
     const gameData = {
         win: false,
@@ -179,8 +172,7 @@ const play = (cardContent, hardMode) => {
         })
     })
 }
-
-// The 'startTimer' function is called in the 'play' function. it initiates the timer and starting the interval to display in the 'Timer div' the time it took to finish. Very usefull for speedrunners.  
+ 
 const startTimer = (gameData) => {
     const timer = document.querySelector("#timer");
     timer.interval = setInterval(() => {
@@ -195,13 +187,11 @@ const startTimer = (gameData) => {
         clearInterval(timer.interval);
     })
 }
-// This function serves as a tool in 'startTimer' function to display the timer correctly as 'two digits : two digits'.
 const addZeroIfLessThanTen = (num) =>{
     if(num < 10) return "0" + num;
     else return num;
 }
 
-// The 'checkAttempt' function is called in the 'play' function every time the user selects two cards to check if they match. If they match they will stay flipped, else they will flip back and the user will lose a heart. The function will call the 'checkProgress' function once every time to check the progress of the game.
 const checkAttempt = (matchAttempt, gameData) => {
     if(matchAttempt[0].innerHTML === matchAttempt[1].innerHTML){
         for(let i = 0; i < matchAttempt.length; i++){
@@ -228,7 +218,6 @@ const checkAttempt = (matchAttempt, gameData) => {
     checkProgress(gameData);
 }
 
-// The 'checkProgress' function is called once everytime at the end of the 'checkAttempt' function to check if all the cards have found their match. if they did the function will call the 'gameFinish' function. else the game will continue. This function will also call the 'gameOver' function if all hearts are lost.
 const checkProgress = (gameData) => {
     if(gameData.lives === 0)
         gameOver(gameData);
@@ -240,7 +229,6 @@ const checkProgress = (gameData) => {
     if(allMatched) gameFinish(gameData);
 }
 
-// The 'gameFinish' function is called in the 'checkProgress' function once all the cards found their match. The function stop the timer and congratulate the user for their 'hard-earned' victory. The function will then restart the game back to selecting difficulty. GGWP.
 const gameFinish = (gameData) => {
     gameData.win = true;
     clearInterval(document.querySelector("#timer").interval);
@@ -259,7 +247,6 @@ const gameFinish = (gameData) => {
     }, 1150)
 }
 
-// The 'gameOver' function is called in the 'checkProgress' function if all hearts have been lost. The function will humiliate the user to the point of no recovery. The function will then restart the game back to selecting difficulty. GIT GUD CASUL LMFAO.
 const gameOver = (gameData) => {
     gameData.win = false;
     clearInterval(document.querySelector("#timer").interval);
@@ -275,8 +262,6 @@ const gameOver = (gameData) => {
     }, 1200)
 }
 
-// The 'restart' function will, quite simply, call the 'init' function. thereby restarting the game.
 const restart = () => init();
 
-// call 'init' onload.
 init();
